@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/home/vaibhav/Desktop/add sum/venv/bin/python3" "$0" "$@"
+'''exec' "/home/shaurabh/Desktop/Py add for cicd/python-demo/venv/bin/python3" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re
