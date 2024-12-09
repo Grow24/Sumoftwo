@@ -3,34 +3,36 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.12  # Use Python 3.12 as you installed it with apt
+      python: 3.12  # Ensure this is supported in your environment
     commands:
       - echo "Installing Python dependencies"
       - sudo apt update
       - sudo apt install -y python3.12-venv
-      - python3 -m venv venv   # Create the virtual environment
-      - source venv/bin/activate  # Activate the virtual environment
-      - pip install -r requirements.txt  # Install required dependencies from the requirements.txt
+      - python3 -m venv venv
+      - source venv/bin/activate
+      - if [ -f requirements.txt ]; then pip install -r requirements.txt; else echo "No requirements file"; fi
   pre_build:
     commands:
       - echo "Checking Python version"
-      - python --version  # Check Python version
+      - python --version
   build:
     commands:
       - echo "Starting Flask app"
-      - python app.py &  # Run the Flask app in the background (replace with your start command)
+      - nohup python app.py &  # Run Flask app in the background
   post_build:
     commands:
+      - echo "Validating Flask app"
+      - curl http://localhost:5000/ || echo "Flask app did not start"
       - echo "Build completed successfully"
+      - ls -al  # List files for verification
 
 artifacts:
   files:
-    - '**/*'  # Include all files in the artifact
-    - '!**/tests/**/*'  # Exclude test files if not needed for deployment
-    - 'dist/*'  # Include the dist directory for artifacts created in the build
-    - 'app.py'  # Include your app script specifically
-    - 'requirements.txt'  # Include the requirements for deployment
+    - 'app.py'
+    - 'requirements.txt'
+    - 'static/**/*'
+    - 'templates/**/*'
 
 cache:
   paths:
-    - '/root/.cache/pip/**/*'  # Cache pip dependencies to speed up builds
+    - '/root/.cache/pip/**/*'
