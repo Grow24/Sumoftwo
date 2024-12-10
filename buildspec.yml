@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.12  # Ensure this is supported in your environment
+      python: 3.12  
     commands:
       - echo "Installing Python dependencies"
       - sudo apt update
